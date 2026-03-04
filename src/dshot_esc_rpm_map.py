@@ -24,10 +24,8 @@ import matplotlib.pyplot as plt
 
 # ──────────────────────────── USER CONFIGURATION ────────────────────────────
 # Path to the rosbag file
-BAG_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "..", "ros_bags", "2026-03-02-22-15-25.bag"
-)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # docs_subscale/
+BAG_PATH = os.path.join(BASE_DIR, "ros_bags", "dshot200_1600_1420kv.bag")
 
 # Telemetry topic that contains esc_rpm
 TELEMETRY_TOPIC = "/telemetry117"
@@ -201,9 +199,12 @@ def main():
 
     # ── 5. Fit 2nd-order polynomial: DShot = f(x) where x = ω / v_bat ──────
     # Polynomial: DShot = p1 * x² + p2 * x + p3
-    coeffs = np.polyfit(x_means, dshot_fit, 2)
-    poly = np.poly1d(coeffs)
-    p1, p2, p3 = coeffs
+    dshot_shifted = dshot_fit - 48.0
+    A = np.column_stack([x_means**2, x_means])
+    coeffs_2, _, _, _ = np.linalg.lstsq(A, dshot_shifted, rcond=None)
+    p1, p2 = coeffs_2
+    p3 = 48.0
+    poly = lambda x: p1 * x**2 + p2 * x + 48.0
 
     print(f"\n  2nd-order polynomial fit  DShot = f(ω / v_bat):")
     print(f"    DShot = {p1:.4f} * x² + {p2:.4f} * x + {p3:.4f}")
