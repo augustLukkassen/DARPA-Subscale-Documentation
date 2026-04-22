@@ -1,7 +1,4 @@
-# GitHub blocks pushes with files at or over 100 MB; keep these local or use Git LFS.
-ros_bags/Spinn w I_2026-04-21-13-50-21.bag
-ros_bags/Spinn w I, SF 1.5_2026-04-19-11-13-20.bag
-
-# Incomplete / scratch
+# GitHub blocks regular blobs ≥100 MB; use Git LFS or keep huge bags only locally.
+# Incomplete / local archive (not in repo)
 **/*.bag.active
 ros_bags/archive/
