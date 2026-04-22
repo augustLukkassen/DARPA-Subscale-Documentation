@@ -1,0 +1,4 @@
+# ROS bag recordings are too large for GitHub (100 MB max); keep local or use Git LFS.
+**/*.bag
+**/*.bag.active
+ros_bags/archive/
